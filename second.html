@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://d3js.org/d3.v5.js"></script>
+
+    <title>second</title>
+  </head>
+  <body>
+    <!-- https://observablehq.com/@d3/lets&#45;make&#45;a&#45;bar&#45;chart -->
+
+    <main>
+    </main>
+  </body>
+
+  <script type="text/javascript">
+    window.onload = function () {
+      const data = [4, 8, 15, 50];
+      const main = d3.selectAll('main');
+      const div = main.append("div");
+
+      div.style("font", "10px sans-serif");
+      div.style('text-align', 'right');
+      div.style('color', 'white');
+
+      const bar = div.selectAll('div');
+
+      const barUpdate = bar.data(data);
+      const barNew = barUpdate.join('div');
+
+      barNew.style('background', 'steelblue');
+      barNew.style('padding', '3px');
+      barNew.style('margin', '1px');
+
+      barNew.style('width', d => `${d * 10}px`);
+
+      barNew.text(d => d);
+    }
+  </script>
+</html>
