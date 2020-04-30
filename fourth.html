@@ -37,10 +37,14 @@
       .domain([0, d3.max(data, d => d[1])])
       .range([height - margin.bottom, margin.top]);
 
-    x = d3.scaleBand() // co scaleTime ?
+    x = d3.scaleBand()
       .domain(days)
       .rangeRound([margin.left, width - margin.right])
       .padding(0.1);
+
+    // x = d3.scaleTime() // co scaleTime ?
+    //   .domain([d3.min(days), d3.max(days)])
+    //   .range([margin.left, width - margin.right])
 
 
     main = d3.selectAll('main');
@@ -50,7 +54,7 @@
 
     svg.append('g')
       .attr('transform', `translate(0, ${height - margin.bottom})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%V %d, %Y")));
 
     svg.append('g')
       .attr('transform', `translate(${margin.left}, 0)`)
@@ -70,7 +74,6 @@
       .attr('x', d => x(new Date(d[0])))
       .attr('y', d => y(d[1]))
       .attr('height', d => y(0) - y(d[1]))
-      // .attr('height', 30)
       .attr('width', x.bandwidth());
 
     svg.call(yTitle);
