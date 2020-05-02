@@ -7,7 +7,13 @@
 
     <script src="https://d3js.org/d3.v5.js"></script>
 
-    <title>second</title>
+    <title>fifth</title>
+
+    <style>
+      .x-axis text {
+        transform: rotate(30deg) translateX(4px) translateY(-2px);
+      }
+    </style>
   </head>
   <body>
     <a href="https://observablehq.com/@d3/lets-make-a-bar-chart/4">link</a>
@@ -18,42 +24,58 @@
 
   <script type="text/javascript">
     data =
-      [ ['2020-04-20', 8.11],
-        ['2020-04-21', 8.44],
-        ['2020-04-22', 7.69],
-        ['2020-04-23', 12.1],
-        ['2020-04-24', 3.15],
-        ['2020-04-25', 3.72],
-        ['2020-04-26', 8.24],
+      [ { tag: '#whee', duration: 7128 },
+        { tag: '#baz', duration: 3120 },
+        { tag: '#bar', duration: 2100 },
+        { tag: '@foo', duration: 720 },
       ]
 
-    days = data.map(d => new Date(d[0]));
-    hours = data.map(d => d[1]);
-    height = 400;
-
-    x = d3.scaleTime()
-      .domain([d3.min(days), d3.max(days)])
-      .range([0, 960]);
+    margin = { top: 20, right: 20, bottom: 20, left: 50 };
+    width = 200;
+    height = 100;
 
     y = d3.scaleLinear()
-      .domain([0, d3.max(hours)])
-      .range([0, 20 * hours.length]);
+      .domain([0, d3.max(data, d => d.duration / 60 / 60)])
+      .range([height - margin.bottom, margin.top]);
 
+    x = d3.scaleBand()
+      .domain(data.map(d => d.tag))
+      .rangeRound([margin.left, width - margin.right])
+      .padding(0.3);
 
     main = d3.selectAll('main');
     svg = main.append('svg');
-    svg.attr('width', x.range()[1])
-      .attr('height', height)
 
-    bar = svg.selectAll('g')
-      .data(data)
-      .join('g')
-      .attr('transform', (d, i) => `translate(${x(new Date(d[0]))}, 0)`);
+    svg.attr('height', '300px');
+      // .attr('width', '300px')
 
-    bar.append('rect')
+    xg = svg.append('g');
+      xg.attr('transform', `translate(0, ${height - margin.bottom})`)
+      .attr('class', 'x-axis')
+      .call(d3.axisBottom(x));
+
+      xg.attr('text-anchor', 'start')
+
+    svg.append('g')
+      .attr('transform', `translate(${margin.left}, 0)`)
+      .call(d3.axisLeft(y).ticks(4));
+
+    yTitle = g => g.append('text')
+      .attr('font-family', 'serif')
+      .attr('font-size', 10)
+      .attr('y', 10)
+      .text("↑ hours");
+
+    svg.append('g')
       .attr('fill', 'steelblue')
-      .attr('width', 20)
-      .attr('height', (d) => { console.log(y(d[1])); return y(d[1]) });
+      .selectAll('rect')
+      .data(data)
+      .join('rect')
+      .attr('x', d => x(d.tag))
+      .attr('y', d => y(d.duration / 60 / 60))
+      .attr('height', d => y(0) - y(d.duration / 60 / 60))
+      .attr('width', x.bandwidth());
 
+    svg.call(yTitle);
   </script>
 </html>
