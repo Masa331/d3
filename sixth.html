@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="d3.min.js"></script>
+
+    <title>fifth</title>
+
+    <style>
+      .x-axis text {
+        transform: rotate(30deg) translateX(4px) translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://observablehq.com/@d3/lets-make-a-bar-chart/4">link</a>
+
+    <div>
+      <p>bar</p>
+    </div>
+    <div>
+      <p class="js-baz">bar</p>
+      <p>bar</p>
+    </div>
+
+    <main>
+    </main>
+  </body>
+
+  <script type="text/javascript">
+    // d3.select('p').text('foo');
+    d3.selectAll('div:last-of-type p.js-baz').text('foo');
+  </script>
+</html>
